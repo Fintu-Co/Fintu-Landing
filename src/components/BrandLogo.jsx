@@ -14,7 +14,7 @@ import './BrandLogo.css';
    · as:      etiqueta contenedora ('div' | 'span' | 'h1' | 'h2'...) (default 'div')
    · className, onClick, ...rest
 */
-function BrandSymbol() {
+export function BrandSymbol() {
   return (
     <svg className="brand-symbol" viewBox="4 2 112 112" aria-hidden="true">
       <path d="M85.46 38.54 A36 36 0 1 1 34.54 38.54" fill="none" stroke="currentColor" strokeWidth="13" strokeLinecap="round" />

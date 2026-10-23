@@ -1,70 +1,12 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Landing.css';
 
-import BrandLogo from './components/BrandLogo';
+import BrandLogo, { BrandSymbol } from './components/BrandLogo';
 import imgCardsFan from './assets/images/cards-fan.jpg';
 
 // La app (login, registro, dashboard) vive en otro dominio: se navega con recarga completa.
 const APP_URL = (import.meta.env.VITE_APP_URL || 'http://localhost:5173').replace(/\/$/, '');
 const goApp = (path) => { window.location.href = `${APP_URL}${path}`; };
-
-/* ════════════════════════════════════════════════════════════
-   INTRO — saludo multiidioma estilo Apple
-   Navy + gold, se reproduce 1 vez por sesión, clic para saltar.
-════════════════════════════════════════════════════════════ */
-const GREETINGS = [
-  'Hola',
-  'Hello',
-  'Bonjour',
-  'Olá',
-  'Ciao',
-  'Hallo',
-  '안녕하세요',
-  'こんにちは',
-  'Hola.',
-];
-
-function IntroGreeting({ onDone }) {
-  const [idx, setIdx] = useState(0);
-  const [leaving, setLeaving] = useState(false);
-
-  // Avance de palabras: la primera respira más, las demás van rápido,
-  // la última ("Hola.") se queda un momento antes de salir.
-  useEffect(() => {
-    if (leaving) return;
-    if (idx < GREETINGS.length - 1) {
-      const t = setTimeout(() => setIdx((i) => i + 1), idx === 0 ? 820 : 340);
-      return () => clearTimeout(t);
-    }
-    const t = setTimeout(() => setLeaving(true), 1050);
-    return () => clearTimeout(t);
-  }, [idx, leaving]);
-
-  // Cuando termina la animación de salida, desmontar
-  useEffect(() => {
-    if (!leaving) return;
-    const t = setTimeout(onDone, 880);
-    return () => clearTimeout(t);
-  }, [leaving, onDone]);
-
-  return (
-    <div
-      className={`lp-intro${leaving ? ' lp-intro--leave' : ''}`}
-      onClick={() => setLeaving(true)}
-      role="presentation"
-    >
-      <div className="lp-intro-center">
-        <div className="lp-intro-word" key={idx}>{GREETINGS[idx]}</div>
-      </div>
-      <div className="lp-intro-brand">
-        <span className="lp-intro-brand-line" />
-        Fintú &amp; Co.
-        <span className="lp-intro-brand-line" />
-      </div>
-      <div className="lp-intro-skip">toca para continuar</div>
-    </div>
-  );
-}
 
 /* ════════════════════════════════════════════════════════════
    LEGAL — Términos y Privacidad
@@ -162,7 +104,7 @@ function LegalModal({ doc, onClose }) {
           <p className="lp-legal-contact">¿Dudas? Escríbenos a soporte@fintu.pe</p>
         </div>
         <div className="lp-legal-foot">
-          <button className="lp-btn-gold" onClick={onClose}>Entendido</button>
+          <button className="lp-btn lp-btn--green" onClick={onClose}>Entendido</button>
         </div>
       </div>
     </div>
@@ -173,140 +115,75 @@ function LegalModal({ doc, onClose }) {
    ICONOS
 ════════════════════════════════════════════════════════════ */
 const Arr = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="14" height="14">
-    <path d="M5 12h14M12 5l7 7-7 7" />
-  </svg>
-);
-
-const IcCard = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" />
-    <line x1="5" y1="15" x2="9" y2="15" /><line x1="13" y1="15" x2="15" y2="15" />
-  </svg>
-);
-const IcChart = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-  </svg>
-);
-const IcCal = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" />
-    <line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
-  </svg>
-);
-const IcPercent = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="19" y1="5" x2="5" y2="19" /><circle cx="6.5" cy="6.5" r="2.5" /><circle cx="17.5" cy="17.5" r="2.5" />
-  </svg>
-);
-const IcTarget = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" />
-  </svg>
-);
-const IcGauge = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 2a10 10 0 0 1 7.39 16.76M12 2A10 10 0 0 0 4.61 18.76" />
-    <line x1="12" y1="12" x2="15.5" y2="8.5" />
-  </svg>
-);
-const IcHome = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15" aria-hidden="true">
+    <path d="M5 12h14M13 6l6 6-6 6" />
   </svg>
 );
 const IcCheck = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" aria-hidden="true">
     <polyline points="20 6 9 17 4 12" />
   </svg>
 );
-const IcLock = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-    <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+const IcPercent = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <line x1="19" y1="5" x2="5" y2="19" /><circle cx="6.5" cy="6.5" r="2.5" /><circle cx="17.5" cy="17.5" r="2.5" />
+  </svg>
+);
+const IcCards = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="2" y="7" width="17" height="12" rx="2" /><path d="M6 4h14a2 2 0 0 1 2 2v9" /><line x1="2" y1="11" x2="19" y2="11" />
+  </svg>
+);
+const IcShield = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" aria-hidden="true">
+    <path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z" />
+  </svg>
+);
+const IcChevron = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" aria-hidden="true">
+    <polyline points="6 9 12 15 18 9" />
   </svg>
 );
 
 /* ════════════════════════════════════════════════════════════
-   DATA
+   CONTENIDO
 ════════════════════════════════════════════════════════════ */
-const FEATURES = [
-  { Icon: IcCard,    titulo: 'Hasta 4 tarjetas',   desc: 'Todas tus tarjetas de cualquier banco peruano, en un solo dashboard.',        res: 'Se acabó revisar cuatro apps distintas.' },
-  { Icon: IcCal,     titulo: 'Ciclos automáticos', desc: 'Fechas de inicio, cierre y pago calculadas solas, tarjeta por tarjeta.',      res: 'Nunca más una mora por olvido.' },
-  { Icon: IcChart,   titulo: 'Historial visual',   desc: 'Gastos, pagos y evolución de tu deuda en gráficos claros.',                   res: 'Entiendes tu plata de un vistazo.' },
-  { Icon: IcTarget,  titulo: 'Metas de ahorro',    desc: 'Define objetivos vinculados a tu deuda y rastrea tu progreso mes a mes.',     res: 'Ves tu deuda bajar mes a mes.' },
-];
-
-/* El premio del buen historial: lo que te abre en el sistema financiero */
-const PAYOFF = [
-  { Icon: IcPercent, t: 'Tasas más bajas',      d: 'Un buen perfil paga menos intereses por el mismo préstamo.' },
-  { Icon: IcHome,    t: 'Créditos grandes',     d: 'Vehicular o hipotecario: tu historial es la llave para montos altos.' },
-  { Icon: IcCard,    t: 'Mejores tarjetas',     d: 'Líneas más altas y tarjetas con beneficios de verdad.' },
-  { Icon: IcGauge,   t: 'Los bancos te buscan', d: 'Dejas de rogar créditos: las ofertas llegan a ti y tú eliges.' },
-];
-
-/* El cambio real en el día a día: sin Fintú vs con Fintú (ítems 1:1) */
-const DAILY = {
-  antes: [
-    '«¿Cuándo cierra mi ciclo?» — ni idea',
-    'Moras por pagos que se te pasan',
-    'Intereses que caen de sorpresa',
-    'Tu deuda regada en apps, correos y papeles',
-  ],
-  despues: [
-    'Sabes qué pagar y cuándo, siempre',
-    'Cero sustos: las fechas se calculan solas',
-    'Ves el interés venir antes de que te cobren',
-    'Todo en un solo tablero, claro y tuyo',
-  ],
-};
-
 const STEPS = [
-  { num: '01', titulo: 'Crea tu cuenta',      desc: 'Regístrate y paga $4 una sola vez vía PayPal. Toma 2 minutos.' },
-  { num: '02', titulo: 'Agrega tus tarjetas', desc: 'Banco, línea de crédito y fechas de ciclo. Sin datos sensibles.' },
-  { num: '03', titulo: 'Toma el control',     desc: 'Registra movimientos, cuida tus fechas y mejora tu score.' },
-];
-
-const FAQS = [
-  { q: '¿Es seguro ingresar mis datos?',              a: 'Sí. No almacenamos datos bancarios ni números de tarjeta. Solo registras montos y fechas de ciclo.' },
-  { q: '¿El pago de $4 es único o mensual?',          a: 'Es un pago único de por vida. Pagas una sola vez y accedes a todas las funciones para siempre.' },
-  { q: '¿Funciona para todas las tarjetas?', a: 'Sí. Puedes agregar cualquier tarjeta de cualquier banco.' },
-  { q: '¿Qué pasa si olvido mi contraseña?',          a: 'Puedes recuperarla desde la pantalla de inicio ingresando tu email registrado.' },
+  { n: '01', t: 'Crea tu cuenta',      d: 'Un pago único de $4 con PayPal.' },
+  { n: '02', t: 'Agrega tus tarjetas', d: 'Banco, línea y fechas. Nada más.' },
+  { n: '03', t: 'Paga a tiempo',       d: 'Fintú te dice cuánto y cuándo.' },
 ];
 
 const PRICE_INCLUDES = [
-  'Todas las funciones incluidas',
-  'Hasta 4 tarjetas simultáneas',
-  'Actualizaciones futuras sin costo',
-  'Sin publicidad ni suscripciones',
-  'Sin datos bancarios requeridos',
-  'Soporte personalizado',
+  'Todas las funciones',
+  'Hasta 4 tarjetas',
+  'Actualizaciones incluidas',
+  'Sin suscripción ni publicidad',
 ];
 
-/* ── VIDEOS ──────────────────────────────────────────────────
-   Pega en `youtube` el link de cada video cuando lo tengas
-   (sirve youtu.be/…, youtube.com/watch?v=… o el ID solo).
-   Mientras esté vacío ('') la tarjeta muestra "Próximamente". */
-const VIDEOS = [
-  {
-    num: '01',
-    titulo: 'Conoce Fintú',
-    desc: 'Qué es Fintú, quién está detrás y qué problema resolvemos.',
-    dur: '1 min',
-    youtube: '',
-  },
-  {
-    num: '02',
-    titulo: 'Tour por la app',
-    desc: 'Cómo registrar tus tarjetas y dominar tus ciclos, paso a paso.',
-    dur: '2 min',
-    youtube: '',
-  },
+const FAQS = [
+  { q: '¿Es seguro?',
+    a: 'No pedimos claves, números de tarjeta ni acceso a tu banco. Solo los montos y fechas que tú ingresas.' },
+  { q: '¿Los $4 son mensuales?',
+    a: 'No. Pagas una vez y la app es tuya para siempre.' },
+  { q: '¿Funciona con mi banco?',
+    a: 'Sí, con cualquier tarjeta de crédito de cualquier banco.' },
+  { q: 'Aún no tengo tarjeta, ¿me sirve?',
+    a: 'Sí. Si recién empiezas, una tarjeta con garantía (dejas un depósito como respaldo) es la forma más fácil de construir historial, y Fintú te ayuda a cuidarlo desde el primer día.' },
+  { q: '¿Y si olvido mi contraseña?',
+    a: 'La recuperas con tu email desde la pantalla de inicio de sesión.' },
+];
+
+const NAV = [
+  { label: 'Beneficios',    id: 'beneficios' },
+  { label: 'Cómo funciona', id: 'pasos' },
+  { label: 'Precio',        id: 'precio' },
+  { label: 'Preguntas',     id: 'preguntas' },
 ];
 
 /* ════════════════════════════════════════════════════════════
    VIDEO AMBIENTE — autoplay silencioso en loop.
-   Con prefers-reduced-motion se congela en un frame (sin loop).
+   Con prefers-reduced-motion se queda en el poster.
 ════════════════════════════════════════════════════════════ */
 function AmbientVideo({ src, poster, className }) {
   const ref = useRef(null);
@@ -314,13 +191,9 @@ function AmbientVideo({ src, poster, className }) {
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-
-    if (reduced) {
-      v.autoplay = false;
-      const freeze = () => { v.pause(); try { v.currentTime = 0.05; } catch { /* noop */ } };
-      if (v.readyState >= 1) freeze();
-      else v.addEventListener('loadedmetadata', freeze, { once: true });
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      v.removeAttribute('autoplay');
+      v.pause();
       return;
     }
     // Algunos navegadores ignoran el atributo autoplay en una SPA: forzamos play.
@@ -329,138 +202,107 @@ function AmbientVideo({ src, poster, className }) {
   }, []);
 
   return (
-    <video
-      ref={ref}
-      className={className}
-      src={src}
-      poster={poster}
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      aria-hidden="true"
-    />
-  );
-}
-
-/* ════════════════════════════════════════════════════════════
-   VIDEO CARD — portada propia; el reproductor de YouTube solo
-   se monta al hacer clic (la página no carga nada de YouTube
-   hasta entonces). Sin link aún → placeholder "Próximamente".
-════════════════════════════════════════════════════════════ */
-function ytId(url) {
-  if (!url) return null;
-  const s = String(url).trim();
-  const m = s.match(/(?:youtu\.be\/|[?&]v=|shorts\/|embed\/|live\/)([\w-]{11})/) || s.match(/^([\w-]{11})$/);
-  return m ? m[1] : null;
-}
-
-function VideoCard({ video, playing, onPlay }) {
-  const id = ytId(video.youtube);
-  // maxresdefault no existe en todos los videos; si falla, cae a hqdefault
-  const [thumbLow, setThumbLow] = useState(false);
-
-  return (
-    <article className={`lp-vid${playing ? ' lp-vid--playing' : ''}`}>
-      <div className="lp-vid-frame">
-        {id ? (
-          playing ? (
-            <iframe
-              src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&color=white`}
-              title={video.titulo}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          ) : (
-            <button
-              type="button"
-              className="lp-vid-cover"
-              onClick={onPlay}
-              aria-label={`Reproducir video: ${video.titulo} (${video.dur})`}
-            >
-              <img
-                src={`https://i.ytimg.com/vi/${id}/${thumbLow ? 'hqdefault' : 'maxresdefault'}.jpg`}
-                alt=""
-                loading="lazy"
-                onError={() => setThumbLow(true)}
-              />
-              <span className="lp-vid-shade" aria-hidden="true" />
-              <span className="lp-vid-play" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M8 5.5v13l11-6.5z" /></svg>
-              </span>
-              <span className="lp-vid-dur">{video.dur}</span>
-            </button>
-          )
-        ) : (
-          <div className="lp-vid-soon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="26" height="26">
-              <path d="M23 7l-7 5 7 5V7z" /><rect x="1" y="5" width="15" height="14" rx="2" />
-            </svg>
-            <span>Próximamente</span>
-            <small>estamos grabando este video</small>
-          </div>
-        )}
-      </div>
-      <div className="lp-vid-meta">
-        <span className="lp-vid-num" aria-hidden="true">{video.num}</span>
-        <div>
-          <h3>{video.titulo}</h3>
-          <p>{video.desc}</p>
-        </div>
-      </div>
-    </article>
+    <video ref={ref} className={className} src={src} poster={poster}
+      autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
   );
 }
 
 /* ════════════════════════════════════════════════════════════
    REVEAL ON SCROLL
 ════════════════════════════════════════════════════════════ */
-function useReveal(active) {
+function useReveal() {
   useEffect(() => {
-    if (!active) return;
     const els = document.querySelectorAll('.reveal');
     if (!els.length) return;
     const io = new IntersectionObserver(
       (entries) => entries.forEach((e) => {
         if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
       }),
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, [active]);
+  }, []);
+}
+
+/* ════════════════════════════════════════════════════════════
+   VISTA PREVIA DE LA APP (datos de ejemplo)
+════════════════════════════════════════════════════════════ */
+function Showcase() {
+  return (
+    <div className="lp-show" aria-label="Vista previa de la app con datos de ejemplo" role="img">
+      {/* Izquierda: video de tarjetas + fichas claras */}
+      <div className="lp-show-media">
+        <AmbientVideo src="/videos/Tarjetas.mp4" poster={imgCardsFan} className="lp-show-video" />
+        <div className="lp-show-shade" />
+        <div className="lp-show-stack" aria-hidden="true">
+          <div className="lp-chip-card">
+            <span className="lp-chip-label">Próximo pago · Visa</span>
+            <div className="lp-chip-row">
+              <strong>S/ 1,240.00</strong>
+              <span className="lp-chip-date">15 nov</span>
+            </div>
+          </div>
+          <div className="lp-chip-card">
+            <div className="lp-chip-row">
+              <span className="lp-chip-label">Uso de tu línea</span>
+              <span className="lp-chip-pct">34%</span>
+            </div>
+            <div className="lp-bars">
+              {Array.from({ length: 30 }, (_, i) => <i key={i} className={i < 10 ? 'on' : ''} />)}
+            </div>
+            <span className="lp-chip-foot"><b>S/ 3,400</b> de S/ 10,000</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Derecha: panel oscuro del dashboard */}
+      <div className="lp-show-panel" aria-hidden="true">
+        <div className="lp-show-top">
+          <span className="lp-pill">Tu tablero</span>
+          <span className="lp-show-ghost">Tus tarjetas</span>
+        </div>
+        <div className="lp-metrics">
+          <div><span>Deuda total</span><strong>S/ 3,480</strong></div>
+          <div><span>Próximo corte</span><strong>25 nov</strong></div>
+          <div><span>Tarjetas</span><strong>3</strong></div>
+          <div><span>Fintú Score</span><strong>82</strong></div>
+        </div>
+        <div className="lp-show-tiles">
+          <div className="lp-tile">
+            <div className="lp-tile-head"><span>Ciclo actual</span><span>Día 18 de 30</span></div>
+            <div className="lp-cycle">
+              <BrandSymbol />
+              <div className="lp-cycle-fill" />
+            </div>
+            <span className="lp-tile-foot">Cierra el 25 · pagas hasta el 15</span>
+          </div>
+          <div className="lp-tile lp-tile--tip">
+            <span className="lp-tile-mark"><BrandSymbol /></span>
+            <p>Paga <b>S/ 1,240</b> antes del 15 y no pagas intereses este mes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 /* ════════════════════════════════════════════════════════════
    LANDING
 ════════════════════════════════════════════════════════════ */
 export default function Landing() {
-  const [openFaq, setOpenFaq] = useState(null);
+  const [openFaq, setOpenFaq] = useState(0);
   const [navScrolled, setNavScrolled] = useState(false);
-  const [navMobileOpen, setNavMobileOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [legalOpen, setLegalOpen] = useState(null); // null | 'terminos' | 'privacidad'
-  const [gtipo, setGtipo] = useState('con');        // guía: 'con' | 'sin' garantía
-  const [playingVid, setPlayingVid] = useState(null); // num del video activo (uno a la vez)
 
-  // Intro: solo una vez por sesión y nunca con reduced-motion
-  const [showIntro, setShowIntro] = useState(() => {
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    return !reduced && !sessionStorage.getItem('fintu_intro_seen');
-  });
+  useReveal();
 
-  const handleIntroDone = useCallback(() => {
-    sessionStorage.setItem('fintu_intro_seen', '1');
-    setShowIntro(false);
-  }, []);
-
-  // Bloquear scroll mientras corre el intro, hay modal legal o menú móvil abierto
   useEffect(() => {
-    document.body.style.overflow = (showIntro || legalOpen || navMobileOpen) ? 'hidden' : '';
+    document.body.style.overflow = (legalOpen || menuOpen) ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
-  }, [showIntro, legalOpen, navMobileOpen]);
+  }, [legalOpen, menuOpen]);
 
-  // Cerrar modal legal con Escape
   useEffect(() => {
     if (!legalOpen) return;
     const onKey = (e) => { if (e.key === 'Escape') setLegalOpen(null); };
@@ -468,541 +310,247 @@ export default function Landing() {
     return () => window.removeEventListener('keydown', onKey);
   }, [legalOpen]);
 
-  useReveal(!showIntro);
-
   useEffect(() => {
-    const onScroll = () => setNavScrolled(window.scrollY > 50);
+    const onScroll = () => setNavScrolled(window.scrollY > 24);
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const go = (id) => (e) => {
+    e?.preventDefault();
+    setMenuOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="lp">
-
-      {showIntro && <IntroGreeting onDone={handleIntroDone} />}
       {legalOpen && <LegalModal doc={legalOpen} onClose={() => setLegalOpen(null)} />}
 
       {/* ─── NAV ─── */}
-      <nav className={`lp-nav${navScrolled ? ' lp-nav--scrolled' : ''}`}>
+      <nav className={`lp-nav${navScrolled ? ' is-scrolled' : ''}`}>
         <div className="lp-nav-in">
-          <BrandLogo
-            size="sm"
-            className="lp-brand"
-            role="button"
-            tabIndex={0}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          />
+          <a href="#top" className="lp-nav-logo" onClick={go('top')} aria-label="Fintú & Co., ir al inicio">
+            <BrandLogo size="sm" as="span" />
+          </a>
           <div className="lp-nav-links">
-            <a href="#sec-features" onClick={(e) => { e.preventDefault(); scrollTo('sec-features'); }}>Funciones</a>
-            <a href="#sec-steps" onClick={(e) => { e.preventDefault(); scrollTo('sec-steps'); }}>Cómo funciona</a>
-            <a href="#sec-pricing" onClick={(e) => { e.preventDefault(); scrollTo('sec-pricing'); }}>Precio</a>
-            <a href="#sec-faq" onClick={(e) => { e.preventDefault(); scrollTo('sec-faq'); }}>FAQ</a>
+            {NAV.map((n) => <a key={n.id} href={`#${n.id}`} onClick={go(n.id)}>{n.label}</a>)}
           </div>
-          <div className="lp-nav-btns">
+          <div className="lp-nav-cta">
+            <button className="lp-btn lp-btn--quiet" onClick={() => goApp('/login')}>Iniciar sesión</button>
+            <button className="lp-btn lp-btn--dark" onClick={() => goApp('/registro')}>Empezar</button>
             <button
-              className="lp-hamburger"
-              onClick={() => setNavMobileOpen(!navMobileOpen)}
-              aria-label={navMobileOpen ? 'Cerrar menú' : 'Abrir menú'}
-              aria-expanded={navMobileOpen}
+              className="lp-burger"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+              aria-expanded={menuOpen}
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                {navMobileOpen
-                  ? <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>
-                  : <><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="15" y2="18"/></>
-                }
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                {menuOpen
+                  ? <><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></>
+                  : <><line x1="4" y1="8" x2="20" y2="8" /><line x1="4" y1="16" x2="20" y2="16" /></>}
               </svg>
             </button>
           </div>
         </div>
+        {menuOpen && (
+          <div className="lp-menu">
+            {NAV.map((n) => <a key={n.id} href={`#${n.id}`} onClick={go(n.id)}>{n.label}</a>)}
+            <button className="lp-btn lp-btn--outline" onClick={() => goApp('/login')}>Iniciar sesión</button>
+          </div>
+        )}
       </nav>
 
-      {/* ─── MOBILE NAV DROPDOWN ─── */}
-      {navMobileOpen && (
-        <div className="lp-mobile-nav" role="dialog" aria-label="Navegación">
-          {[
-            { label: 'Funciones',     id: 'sec-features' },
-            { label: 'Cómo funciona', id: 'sec-steps'    },
-            { label: 'Precio',        id: 'sec-pricing'  },
-            { label: 'FAQ',           id: 'sec-faq'      },
-          ].map(({ label, id }) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              onClick={(e) => { e.preventDefault(); setNavMobileOpen(false); scrollTo(id); }}
-            >
-              {label}
-            </a>
-          ))}
-          <div className="lp-mobile-nav-btns">
-            <button className="lp-btn-ghost" onClick={() => { setNavMobileOpen(false); goApp('/login'); }}>Iniciar sesión</button>
-            <button className="lp-btn-gold" onClick={() => { setNavMobileOpen(false); goApp('/registro'); }}>Comenzar <Arr /></button>
-          </div>
-        </div>
-      )}
-
-      {/* ─── HERO (showcase split · mensaje | figura | ficha) ─── */}
-      <header className={`lp-hero lp-hero--split${showIntro ? '' : ' lp-hero--in'}`}>
-        <div className="lp-hero-glow" aria-hidden="true" />
-        <div className="lp-hero-split">
-
-          {/* ── IZQUIERDA · mensaje ── */}
-          <div className="lp-hero-msg">
-            <div className="lp-hero-eyebrow">Para tus tarjetas de crédito</div>
-            <h1 className="lp-hero-title">
-              No pagues
-              <br />
-              <span className="lp-hero-gold">intereses de más.</span>
-            </h1>
-            <p className="lp-hero-sub">
-              Se adapta a tus tarjetas y te ayuda a gestionar tu deuda, ciclos
-              y pagos. Sin conectar tu banco.
-            </p>
-            <div className="lp-hero-cta">
-              <button className="lp-btn-gold lp-btn-hero" onClick={() => goApp('/registro')}>
-                Empezar por $4 <Arr />
-              </button>
-              <button className="lp-btn-text" onClick={() => scrollTo('sec-features')}>
-                Explorar funciones <Arr />
-              </button>
-            </div>
-            <div className="lp-hero-swatch">
-              <div className="lp-hero-swatch-item">
-                <span className="lp-sw-dot lp-sw-1" />
-                <small>Sin datos<br />bancarios</small>
-              </div>
-              <div className="lp-hero-swatch-item">
-                <span className="lp-sw-dot lp-sw-2" />
-                <small>Pago único<br />de por vida</small>
-              </div>
-              <div className="lp-hero-swatch-item">
-                <span className="lp-sw-dot lp-sw-3" />
-                <small>100%<br />peruano</small>
-              </div>
-            </div>
-          </div>
-
-          {/* ── CENTRO · figura ── */}
-          <div className="lp-hero-figure-col" aria-hidden="true">
-            <BrandLogo tagline={false} className="lp-hero-backdrop" aria-hidden="true" />
-            <div className="lp-hero-stage-halo" />
-            <div className="lp-hero-figure">
-              <img
-                src="/images/hero-persona.jpg"
-                alt=""
-                className="lp-hero-figure-img"
-                onLoad={(e) => e.currentTarget.closest('.lp-hero-figure').classList.add('has-img')}
-              />
-              <div className="lp-hero-figure-ph">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="30" height="30">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
-                </svg>
-                <span>Tu foto aquí</span>
-                <small>fondo blanco · se funde solo</small>
-              </div>
-            </div>
-
-            {/* Anotaciones que señalan a la persona (estilo "Moisture Absorber") */}
-            <div className="lp-hero-note lp-note-score">
-              <span className="lp-note-line" />
-              <span className="lp-chip-label">Tu score</span>
-              <span className="lp-chip-num">82<small>/100</small></span>
-            </div>
-            <div className="lp-hero-note lp-note-growth">
-              <span className="lp-note-line" />
-              <span className="lp-chip-label">Tu progreso</span>
-              <div className="lp-chip-spark">
-                <svg viewBox="0 0 64 26" fill="none" preserveAspectRatio="none" aria-hidden="true">
-                  <polyline points="0,22 13,17 26,19 38,11 51,8 64,2" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <span className="lp-chip-trend">+18%</span>
-              </div>
-            </div>
-          </div>
-
-          {/* ── DERECHA · ficha ── */}
-          <div className="lp-hero-detail">
-            <div className="lp-hero-rank">
-              <span className="lp-hero-rank-label">Valoración</span>
-              <span className="lp-hero-rank-stars">4.9 <b>★★★★★</b></span>
-            </div>
-            <h3 className="lp-hero-detail-title">Fintú Score</h3>
-            <p className="lp-hero-detail-desc">
-              Mira, entiende y mejora la salud de todas tus tarjetas: ciclos, intereses y metas en un tablero claro.
-            </p>
-            <button className="lp-btn-dark lp-hero-buy" onClick={() => goApp('/login')}>
-              Iniciar sesión <Arr />
-            </button>
-          </div>
-
-        </div>
-      </header>
-
-      {/* ─── GUÍA NOVATOS · educación honesta (con/sin garantía) ─── */}
-      <section id="sec-guia" className="lp-guide">
-        <div className="lp-guide-in">
-          <div className="lp-guide-head reveal">
-            <div className="lp-guide-eyebrow">Guía para novatos</div>
-            <h2 className="lp-guide-title">
-              ¿Cansado de no entender cómo funciona{' '}
-              <span className="lp-hero-gold">una tarjeta de crédito?</span>
-            </h2>
-            <p className="lp-guide-sub">Aquí te ayudamos. Empezar es más simple de lo que crees.</p>
-          </div>
-
-          {/* Recorrido: cómo empezar, paso a paso */}
-          <div className="lp-guide-journey reveal">
-            {[
-              {
-                n: '01', t: 'Ve a tu banco',
-                d: 'Pregunta si calificas para una tarjeta, con o sin garantía.',
-                ic: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11M10 21v-6h4v6" /></svg>,
-              },
-              {
-                n: '02', t: 'Saca la tuya',
-                d: 'Con el monto y las condiciones que de verdad te convengan.',
-                ic: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2" /><line x1="2" y1="10" x2="22" y2="10" /></svg>,
-              },
-              {
-                n: '03', t: 'Fintú hace el resto',
-                d: 'Ordena tus ciclos, pagos e intereses. Te acompaña en cada paso.',
-                hl: true, // el destino de la ruta: navy + dorado, el momento Fintú
-                ic: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>,
-              },
-            ].map((p) => (
-              <div className={`lp-jstep${p.hl ? ' lp-jstep--hl' : ''}`} key={p.n}>
-                <span className="lp-jstep-ico">{p.ic}</span>
-                <span className="lp-jstep-num" aria-hidden="true">{p.n}</span>
-                <h4 className="lp-jstep-title">{p.t}</h4>
-                <p className="lp-jstep-desc">{p.d}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Diferencia con/sin garantía: tarjeta de consulta con toggle */}
-          <div className="lp-guide-toggle reveal">
-            <div className="lp-toggle-card">
-              <div className="lp-toggle-head">
-                <span className="lp-toggle-kicker">La gran duda</span>
-                <h3 className="lp-toggle-title">
-                  ¿Con garantía o <span className="lp-hero-gold">sin garantía?</span>
-                </h3>
-                <p className="lp-toggle-hint">Toca cada opción y mira la diferencia.</p>
-              </div>
-              <div className="lp-toggle-pills" role="tablist" aria-label="Tipo de tarjeta">
-                <button
-                  type="button" role="tab"
-                  aria-selected={gtipo === 'sin'}
-                  className={`lp-toggle-pill${gtipo === 'sin' ? ' active' : ''}`}
-                  onClick={() => setGtipo('sin')}
-                >
-                  Sin garantía
+      <main id="top">
+        {/* ─── HERO ─── */}
+        <header className="lp-frame lp-hero">
+          <div className="lp-hero-top">
+            <h1 className="lp-h1">No pagues<br />intereses de más.</h1>
+            <div className="lp-hero-side">
+              <p>
+                Fintú calcula el ciclo de cada tarjeta y te dice cuánto y cuándo
+                pagar. Sin conectar tu banco.
+              </p>
+              <div className="lp-btn-row">
+                <button className="lp-btn lp-btn--green lp-btn--lg" onClick={() => goApp('/registro')}>
+                  Empezar por $4 <Arr />
                 </button>
-                <button
-                  type="button" role="tab"
-                  aria-selected={gtipo === 'con'}
-                  className={`lp-toggle-pill${gtipo === 'con' ? ' active' : ''}`}
-                  onClick={() => setGtipo('con')}
-                >
-                  Con garantía
+                <button className="lp-btn lp-btn--outline lp-btn--lg" onClick={go('pasos')}>
+                  Cómo funciona
                 </button>
               </div>
-              {/* aria-live va en el wrapper estable; el key reinicia la animación */}
-              <div aria-live="polite">
-                <div className="lp-toggle-panel" key={gtipo}>
-                  {gtipo === 'sin' ? (
-                    <>
-                      <div className="lp-toggle-lead">
-                        <h4>La común</h4>
-                        <p>
-                          El banco mira tus ingresos y tu historial, y te da una
-                          línea de crédito basada en <strong>confianza</strong>.
-                          Es la que la mayoría conoce.
-                        </p>
-                      </div>
-                      <ul className="lp-toggle-specs">
-                        <li>Debes sustentar tus ingresos</li>
-                        <li>Casi siempre piden algo de historial</li>
-                        <li>Tu línea depende de tu perfil</li>
-                      </ul>
-                    </>
-                  ) : (
-                    <>
-                      <div className="lp-toggle-lead">
-                        <h4>
-                          La puerta de entrada
-                          <span className="lp-toggle-badge">Ideal si recién empiezas</span>
-                        </h4>
-                        <p>
-                          Dejas un depósito como respaldo y el banco te da una línea
-                          sobre ese monto. Es la forma más fácil de{' '}
-                          <strong>construir tu historial desde cero</strong>.
-                        </p>
-                      </div>
-                      <ul className="lp-toggle-specs">
-                        <li>No necesitas historial previo</li>
-                        <li>Tu depósito respalda tu línea</li>
-                        <li>Menos riesgo de que te rechacen</li>
-                      </ul>
-                    </>
-                  )}
-                </div>
-              </div>
             </div>
           </div>
+          <Showcase />
+        </header>
 
-          <p className="lp-guide-note reveal">
-            Información referencial. Las condiciones dependen de cada entidad; verifica con el banco antes de decidir.
-          </p>
-        </div>
-      </section>
-
-      {/* ─── FUNCIONES (tarjetas numeradas, estilo ficha) ─── */}
-      <section id="sec-features" className="lp-feat">
-        <div className="lp-feat-in">
-          <div className="lp-feat-head reveal">
-            <div className="lp-feat-head-l">
-              <div className="lp-feat-eyebrow">Lo que incluye</div>
-              <h2 className="lp-feat-title">
-                Todo lo que <span className="lp-hero-gold">necesitas.</span>
-              </h2>
-            </div>
-            <p className="lp-feat-intro">
-              Cuatro herramientas para ver, entender y dominar todas tus tarjetas
-              de crédito desde un solo lugar.
-            </p>
+        {/* ─── BENEFICIOS ─── */}
+        <section id="beneficios" className="lp-sec">
+          <div className="lp-sec-head reveal">
+            <span className="lp-eyebrow">Por qué Fintú</span>
+            <h2 className="lp-h2">Menos sustos.<br />Menos intereses.</h2>
           </div>
-          {/* Franja sin cajas: es información, no botones */}
-          <div className="lp-feat-list">
-            {FEATURES.map((f, i) => (
-              <div className="lp-feat-item reveal" key={f.titulo} style={{ transitionDelay: `${i * 0.07}s` }}>
-                <div className="lp-feat-item-ico"><f.Icon /></div>
-                <h3>{f.titulo}</h3>
-                <p>{f.desc}</p>
-                <span className="lp-feat-res">{f.res}</span>
+
+          <div className="lp-bento">
+            <article className="lp-b lp-b--dark lp-b--tall reveal">
+              <div className="lp-ring" aria-hidden="true">
+                <svg viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="46" className="lp-ring-track" />
+                  <circle cx="60" cy="60" r="46" className="lp-ring-fill" />
+                </svg>
+                <div className="lp-ring-txt"><strong>7</strong><span>días para pagar</span></div>
               </div>
-            ))}
-          </div>
+              <h3>Sabes cuándo pagar</h3>
+              <p>Fintú calcula el corte y el pago de cada tarjeta. Se acabaron las moras por olvido.</p>
+            </article>
 
-        </div>
-      </section>
+            <article className="lp-b reveal">
+              <span className="lp-b-ico"><IcPercent /></span>
+              <h3>Ves el interés antes de que llegue</h3>
+              <p>Te muestra cuánto pagarías si no cancelas el total.</p>
+            </article>
 
-      {/* ─── VIDEOS (aprende con Fintú en 3 minutos) ─── */}
-      <section id="sec-videos" className="lp-vids">
-        <div className="lp-vids-in">
-          <div className="lp-vids-head reveal">
-            <div className="lp-feat-eyebrow">En video</div>
-            <h2 className="lp-feat-title">
-              Míralo <span className="lp-hero-gold">en acción.</span>
-            </h2>
-            <p className="lp-vids-intro">
-              Dos videos cortos y al grano: qué es Fintú y cómo se usa por dentro.
-            </p>
-          </div>
-          {/* El reveal va en el grid: si fuera por tarjeta, React borraría
-              la clase `visible` al re-renderizar cuando le das play */}
-          <div className="lp-vids-grid reveal">
-            {VIDEOS.map((v) => (
-              <VideoCard
-                key={v.num}
-                video={v}
-                playing={playingVid === v.num}
-                onPlay={() => setPlayingVid(v.num)}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+            <article className="lp-b reveal">
+              <span className="lp-b-ico"><IcCards /></span>
+              <h3>Todo en un solo lugar</h3>
+              <p>Hasta 4 tarjetas de cualquier banco, en un tablero.</p>
+            </article>
 
-      {/* ─── VISUAL BREAK (video de fondo) ─── */}
-      <section className="lp-visual">
-        <AmbientVideo src="/videos/Tarjetas.mp4" poster={imgCardsFan} className="lp-visual-media" />
-        <div className="lp-visual-ov" />
-        <div className="lp-visual-body">
-          <h2 className="reveal">Diseñado para sentirse <span>premium.</span></h2>
-          <p className="reveal delay-1">La experiencia de una app de banca privada, al precio de un café.</p>
-        </div>
-      </section>
-
-      {/* ─── EL PREMIO DEL HISTORIAL (aspiracional, a mitad de página) ─── */}
-      <section className="lp-payoff-sec">
-        <div className="lp-payoff-in reveal">
-          <div className="lp-payoff-head">
-            <h2>
-              Ordenarte tiene premio:{' '}
-              <span className="lp-hero-gold">un buen historial te abre puertas.</span>
-            </h2>
-            <p>
-              Cada pago puntual construye tu reputación ante los bancos.
-              Con el tiempo, eso se convierte en:
-            </p>
-          </div>
-          <div className="lp-payoff-row">
-            {PAYOFF.map((b) => (
-              <div className="lp-payoff-item" key={b.t}>
-                <span className="lp-payoff-ico"><b.Icon /></span>
-                <h4>{b.t}</h4>
-                <p>{b.d}</p>
+            <article className="lp-b lp-b--peach lp-b--wide reveal">
+              <div>
+                <h3>Tu historial mejora solo</h3>
+                <p>Pagar a tiempo construye tu perfil: mejores tasas, más línea y créditos más grandes después.</p>
               </div>
-            ))}
+              <svg className="lp-b-trend" viewBox="0 0 160 70" aria-hidden="true">
+                <polyline points="4,62 36,50 64,54 96,30 124,24 156,6" />
+              </svg>
+            </article>
           </div>
-        </div>
-      </section>
 
-      {/* ─── EL CAMBIO EN TU DÍA A DÍA (argumento, camino al cierre) ─── */}
-      <section className="lp-sec">
-        <div className="lp-sec-head reveal">
-          <h2 className="lp-sec-title">
-            El cambio en tu <span className="lp-hero-gold">día a día.</span>
-          </h2>
-        </div>
-        <div className="lp-daily-grid reveal">
-          <div className="lp-fd-col lp-fd-col--now">
-            <span className="lp-fd-tag">Sin Fintú</span>
+          <ul className="lp-trust reveal">
+            <li><IcShield /> Sin conectar tu banco</li>
+            <li><IcShield /> Sin número de tarjeta</li>
+            <li><IcShield /> Hecho en Perú</li>
+          </ul>
+        </section>
+
+        {/* ─── CÓMO FUNCIONA ─── */}
+        <section id="pasos" className="lp-sec lp-sec--tight">
+          <div className="lp-steps-head reveal">
+            <span className="lp-eyebrow">Cómo funciona</span>
+            <h2 className="lp-h2">Listo en tres pasos.</h2>
+          </div>
+          <ol className="lp-steps">
+            {STEPS.map((s, i) => (
+              <li className="reveal" key={s.n} style={{ transitionDelay: `${i * 0.08}s` }}>
+                <span className="lp-step-n">{s.n}</span>
+                <h3>{s.t}</h3>
+                <p>{s.d}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        {/* ─── PRECIO ─── */}
+        <section id="precio" className="lp-frame lp-price reveal">
+          <div className="lp-price-l">
+            <span className="lp-eyebrow lp-eyebrow--light">Precio</span>
+            <div className="lp-price-num"><span>$</span>4</div>
+            <h2 className="lp-h2 lp-h2--light">Una vez. Para siempre.</h2>
+            <p>Menos de lo que cuesta un solo descuido con tu tarjeta.</p>
+          </div>
+          <div className="lp-price-r">
             <ul>
-              {DAILY.antes.map((t) => <li key={t}>{t}</li>)}
-            </ul>
-          </div>
-          <div className="lp-fd-arrow" aria-hidden="true"><Arr /></div>
-          <div className="lp-fd-col lp-fd-col--fintu">
-            <span className="lp-fd-tag">Con Fintú</span>
-            <ul>
-              {DAILY.despues.map((t) => <li key={t}>{t}</li>)}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── PASOS ─── */}
-      <section id="sec-steps" className="lp-sec">
-        <div className="lp-sec-head reveal">
-          <h2 className="lp-sec-title">Empieza en tres pasos</h2>
-        </div>
-        <div className="lp-steps-grid">
-          {STEPS.map((s, i) => (
-            <div className="lp-step reveal" key={s.num} style={{ transitionDelay: `${i * 0.1}s` }}>
-              <div className="lp-step-num">{s.num}</div>
-              <h3>{s.titulo}</h3>
-              <p>{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ─── PRECIO (navy, el momento de la página) ─── */}
-      <section id="sec-pricing" className="lp-pricing">
-        <div className="lp-pricing-aura" aria-hidden="true" />
-        <div className="lp-pricing-in">
-          <div className="lp-pricing-copy reveal">
-            <h2>Un pago.<br /><span>Para siempre.</span></h2>
-            <p>
-              Sin suscripciones, sin renovaciones, sin letra pequeña.
-              Pagas una vez y la app es tuya de por vida.
-            </p>
-            <div className="lp-pricing-secure">
-              <IcLock /> Pago procesado de forma segura por PayPal
-            </div>
-          </div>
-
-          <div className="lp-price-card reveal delay-1">
-            <div className="lp-price-badge">Acceso completo</div>
-            <div className="lp-price-amount">
-              <span className="curr">$</span>
-              <span className="num">4</span>
-              <span className="meta">USD<br />pago único</span>
-            </div>
-            <ul className="lp-price-list">
               {PRICE_INCLUDES.map((t) => (
                 <li key={t}><span className="lp-check"><IcCheck /></span>{t}</li>
               ))}
             </ul>
-            <button className="lp-btn-gold lp-btn-full" onClick={() => goApp('/registro')}>
+            <button className="lp-btn lp-btn--peach lp-btn--lg lp-btn--block" onClick={() => goApp('/registro')}>
               Crear mi cuenta <Arr />
             </button>
-            <p className="lp-price-terms">
-              Al crear tu cuenta aceptas los <span onClick={() => setLegalOpen('terminos')}>Términos</span> y
-              la <span onClick={() => setLegalOpen('privacidad')}>Política de Privacidad</span>.
-            </p>
-            <p className="lp-price-login">
-              ¿Ya tienes cuenta? <span onClick={() => goApp('/login')}>Inicia sesión</span>
+            <p className="lp-price-fine">
+              Pago seguro con PayPal. Al crear tu cuenta aceptas los{' '}
+              <button type="button" onClick={() => setLegalOpen('terminos')}>Términos</button> y la{' '}
+              <button type="button" onClick={() => setLegalOpen('privacidad')}>Privacidad</button>.
             </p>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ─── FAQ ─── */}
-      <section id="sec-faq" className="lp-sec lp-sec-faq">
-        <div className="lp-sec-head reveal">
-          <h2 className="lp-sec-title">Preguntas frecuentes</h2>
-        </div>
-        {/* El reveal va en el contenedor: si fuera en cada item, React borraría
-            la clase `visible` (agregada por el observer) al re-renderizar con `open` */}
-        <div className="lp-faq-list reveal">
-          {FAQS.map((f, i) => (
-            <div
-              className={`lp-faq-item${openFaq === i ? ' open' : ''}`}
-              key={f.q}
-              onClick={() => setOpenFaq(openFaq === i ? null : i)}
-            >
-              <div className="lp-faq-q">
-                <span>{f.q}</span>
-                <span className="lp-faq-arr">›</span>
-              </div>
-              <div className="lp-faq-a"><p>{f.a}</p></div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ─── FOOTER ─── */}
-      <footer className="lp-footer">
-        <div className="lp-footer-grid">
-          <div className="lp-footer-brand">
-            <BrandLogo size="md" tagline className="lp-footer-logo" />
-            <p className="lp-footer-tagline">
-              La app peruana para gestionar, organizar y optimizar tus tarjetas de crédito.
-            </p>
+        {/* ─── PREGUNTAS ─── */}
+        <section id="preguntas" className="lp-sec lp-faq">
+          <div className="lp-faq-l reveal">
+            <span className="lp-eyebrow">Preguntas</span>
+            <h2 className="lp-h2">Lo que todos preguntan.</h2>
+            <p>¿Otra duda? <a href="mailto:soporte@fintu.pe">soporte@fintu.pe</a></p>
           </div>
-          <div className="lp-footer-col">
+          <div className="lp-faq-list reveal">
+            {FAQS.map((f, i) => {
+              const open = openFaq === i;
+              return (
+                <div className={`lp-faq-item${open ? ' is-open' : ''}`} key={f.q}>
+                  <button
+                    type="button"
+                    className="lp-faq-q"
+                    aria-expanded={open}
+                    aria-controls={`faq-${i}`}
+                    onClick={() => setOpenFaq(open ? null : i)}
+                  >
+                    <span>{f.q}</span><IcChevron />
+                  </button>
+                  <div className="lp-faq-a" id={`faq-${i}`} role="region" hidden={!open}>
+                    <p>{f.a}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      </main>
+
+      {/* ─── CIERRE + FOOTER ─── */}
+      <footer className="lp-frame lp-end">
+        <div className="lp-end-cta">
+          <h2 className="lp-h2 lp-h2--light">Toma el control<br />de tus tarjetas.</h2>
+          <div className="lp-btn-row">
+            <button className="lp-btn lp-btn--peach lp-btn--lg" onClick={() => goApp('/registro')}>
+              Empezar por $4 <Arr />
+            </button>
+            <button className="lp-btn lp-btn--ink lp-btn--lg" onClick={() => goApp('/login')}>
+              Iniciar sesión
+            </button>
+          </div>
+        </div>
+
+        <div className="lp-foot">
+          <div className="lp-foot-brand">
+            <BrandLogo size="md" />
+            <p>La app peruana para pagar tus tarjetas a tiempo.</p>
+          </div>
+          <div className="lp-foot-col">
             <h4>Producto</h4>
-            <ul>
-              <li onClick={() => goApp('/registro')}>Crear cuenta</li>
-              <li onClick={() => goApp('/login')}>Iniciar sesión</li>
-              <li onClick={() => scrollTo('sec-pricing')}>Precio</li>
-              <li onClick={() => scrollTo('sec-faq')}>Preguntas frecuentes</li>
-            </ul>
+            <a href="#beneficios" onClick={go('beneficios')}>Beneficios</a>
+            <a href="#precio" onClick={go('precio')}>Precio</a>
+            <a href="#preguntas" onClick={go('preguntas')}>Preguntas</a>
           </div>
-          <div className="lp-footer-col">
+          <div className="lp-foot-col">
             <h4>Legal</h4>
-            <ul>
-              <li onClick={() => setLegalOpen('terminos')}>Términos y Condiciones</li>
-              <li onClick={() => setLegalOpen('privacidad')}>Política de Privacidad</li>
-            </ul>
+            <button type="button" onClick={() => setLegalOpen('terminos')}>Términos y condiciones</button>
+            <button type="button" onClick={() => setLegalOpen('privacidad')}>Privacidad</button>
           </div>
-          <div className="lp-footer-col">
+          <div className="lp-foot-col">
             <h4>Contacto</h4>
-            <ul>
-              <li><a href="mailto:soporte@fintu.pe">soporte@fintu.pe</a></li>
-            </ul>
+            <a href="mailto:soporte@fintu.pe">soporte@fintu.pe</a>
           </div>
         </div>
-        <div className="lp-footer-bottom">
-          <p>© {new Date().getFullYear()} Fintú &amp; Co. · Perú 🇵🇪 · Todos los derechos reservados.</p>
-        </div>
+
+        <p className="lp-copy">© {new Date().getFullYear()} Fintú &amp; Co. · Hecho en Perú</p>
       </footer>
 
-      {/* ─── MOBILE STICKY CTA ─── */}
-      <div className="lp-mobile-cta">
-        <div className="lp-mca-left">
-          <span className="lp-mca-label">Acceso de por vida</span>
-          <span className="lp-mca-price"><strong>$4 USD</strong> pago único</span>
-        </div>
-        <button className="lp-btn-gold" onClick={() => goApp('/registro')}>
-          Empezar <Arr />
-        </button>
+      {/* ─── CTA FIJO EN CELULAR ─── */}
+      <div className="lp-sticky">
+        <span><strong>$4</strong> pago único</span>
+        <button className="lp-btn lp-btn--green" onClick={() => goApp('/registro')}>Empezar <Arr /></button>
       </div>
-
     </div>
   );
 }
