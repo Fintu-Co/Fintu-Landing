@@ -15,63 +15,66 @@ const goApp = (path) => { window.location.href = `${APP_URL}${path}`; };
 const LEGAL = {
   terminos: {
     title: 'Términos y Condiciones',
-    updated: 'Julio 2026',
+    intro: 'Lo esencial, en palabras simples.',
+    updated: 'Octubre 2026',
     sections: [
-      { h: '1. El servicio', p: [
-        'Fintú & Co. es una herramienta de organización financiera personal. No somos una entidad financiera, no otorgamos créditos ni nos conectamos a tu banco. La app te permite registrar y visualizar manualmente la información de tus tarjetas de crédito.',
+      { h: '1. Qué es Fintú', p: [
+        'Una herramienta para ordenar tus tarjetas de crédito. No somos un banco: no prestamos dinero ni nos conectamos a tu banco. Todo lo que ves en la app lo registras tú.',
       ]},
-      { h: '2. Acceso y pago', p: [
-        'El acceso se obtiene mediante un pago único de $4 USD procesado por PayPal. La licencia es personal, intransferible y válida durante toda la vida del servicio. No existen suscripciones ni cobros recurrentes.',
+      { h: '2. Cuánto pagas y qué obtienes', p: [
+        'Pagas $4 USD una sola vez, por PayPal. Con eso tienes acceso a todo mientras el servicio exista. No hay mensualidades ni cobros automáticos.',
+        'Tu acceso es personal: no se puede vender ni pasar a otra persona.',
       ]},
       { h: '3. Tu cuenta', p: [
-        'Eres responsable de mantener la confidencialidad de tu contraseña y de la veracidad de los datos que registras. Una cuenta corresponde a una sola persona.',
+        'Cuida tu contraseña y no la compartas. Registra datos reales para que los cálculos te sirvan. Cada cuenta es de una sola persona.',
       ]},
-      { h: '4. Información referencial', p: [
-        'Los cálculos que muestra la app (intereses, ciclos, score de salud financiera y similares) son estimaciones referenciales basadas en los datos que tú ingresas. No constituyen asesoría financiera, contable ni legal. Las decisiones que tomes con esta información son tu responsabilidad.',
+      { h: '4. Los cálculos te orientan; tú decides', p: [
+        'Los intereses, fechas y puntajes que ves son estimaciones hechas con los datos que ingresas. Te ayudan a decidir mejor, pero no son asesoría financiera, contable ni legal. La decisión final siempre es tuya.',
       ]},
-      { h: '5. Reembolsos', p: [
-        'Por la naturaleza digital del producto, no se realizan reembolsos una vez activado el acceso, salvo error de cobro demostrable.',
+      { h: '5. Devoluciones', p: [
+        'Como es un producto digital que usas desde el primer día, no devolvemos el pago una vez activado tu acceso. La excepción: si te cobramos por error, te lo devolvemos.',
       ]},
-      { h: '6. Propiedad intelectual', p: [
-        'La marca Fintú & Co., el diseño, el código, los textos y todos los contenidos de la plataforma son propiedad exclusiva de Fintú & Co. Queda prohibida su copia, reproducción, distribución, modificación o ingeniería inversa, total o parcial, sin autorización escrita.',
+      { h: '6. Lo que es de Fintú', p: [
+        'La marca, el diseño, el código y los textos de Fintú & Co. son nuestros. No se pueden copiar ni reutilizar sin nuestro permiso por escrito.',
       ]},
-      { h: '7. Marcas de terceros y tasas de referencia', p: [
-        'Los nombres y marcas de bancos, financieras y emisoras de tarjetas mencionados en la plataforma pertenecen a sus respectivos titulares y se usan únicamente con fines de identificación y comparación informativa. Fintú & Co. no está afiliada, patrocinada ni respaldada por ninguna de ellas, ni actúa como intermediaria o promotora de sus productos.',
-        'Las tasas (TEA) que muestra el comparador son referenciales, se basan en información pública de la SBS y pueden variar en cualquier momento. La tasa aplicable a cada persona depende de su perfil crediticio y del producto contratado. Verifica siempre las condiciones vigentes directamente con la entidad financiera antes de tomar una decisión.',
+      { h: '7. Bancos y tasas que mencionamos', p: [
+        'Los nombres de bancos y tarjetas pertenecen a sus dueños. Los mencionamos solo para que puedas identificarlos y comparar. No trabajamos con ellos ni los promocionamos.',
+        'Las tasas del comparador son referenciales, salen de información pública de la SBS y pueden cambiar. La tasa que te toque depende de tu perfil y de tu tarjeta: confírmala con tu banco antes de decidir.',
       ]},
-      { h: '8. Cambios', p: [
-        'Podemos actualizar el servicio y estos términos para mejorarlos. Los cambios relevantes se comunicarán dentro de la app.',
+      { h: '8. Si algo cambia', p: [
+        'Podemos mejorar el servicio y actualizar estos términos. Si el cambio es importante, te avisamos dentro de la app.',
       ]},
       { h: '9. Ley aplicable', p: [
-        'Estos términos se rigen por las leyes de la República del Perú.',
+        'Estos términos se rigen por las leyes del Perú.',
       ]},
     ],
   },
   privacidad: {
     title: 'Política de Privacidad',
-    updated: 'Junio 2026',
+    intro: 'Qué guardamos, para qué y quién lo ve. Sin letra pequeña.',
+    updated: 'Octubre 2026',
     sections: [
-      { h: '1. Datos que recopilamos', p: [
-        'Para crear tu cuenta solo pedimos: nombre, apellido, email y una contraseña (que guardamos cifrada). Al pagar, registramos el identificador de la transacción que nos entrega PayPal.',
-        'Nunca pedimos ni almacenamos números de tarjeta, CVV, claves bancarias ni credenciales de banca por internet.',
+      { h: '1. Lo que te pedimos', p: [
+        'Para crear tu cuenta: nombre, apellido, correo y una contraseña. La contraseña se guarda cifrada: ni nosotros podemos verla. Cuando pagas, guardamos el código de la transacción que nos envía PayPal.',
+        'Nunca te pedimos números de tarjeta, CVV, claves del banco ni acceso a tu banca por internet.',
       ]},
-      { h: '2. Datos que tú registras', p: [
-        'Los montos, fechas de ciclo y movimientos que ingresas en la app son datos que tú decides registrar manualmente. Se usan únicamente para mostrarte tu propia información y cálculos.',
+      { h: '2. Lo que tú anotas', p: [
+        'Los montos, fechas y movimientos de tus tarjetas los escribes tú. Solo los usamos para mostrarte tu información y hacer tus cálculos.',
       ]},
       { h: '3. Para qué usamos tus datos', p: [
-        'Autenticarte, operar las funciones de la app, enviarte el código de recuperación de contraseña a tu email y brindarte soporte. Nada más.',
+        'Solo para que la app funcione: dejarte entrar, hacer tus cálculos, enviarte un código si olvidas tu contraseña y ayudarte si nos escribes. Nada más.',
       ]},
-      { h: '4. Con quién compartimos', p: [
-        'Con nadie. No vendemos ni cedemos tus datos a terceros. El pago lo procesa PayPal bajo sus propios términos y nosotros solo recibimos la confirmación.',
+      { h: '4. Con quién los compartimos', p: [
+        'Con nadie. No vendemos ni regalamos tus datos. El pago lo procesa PayPal con sus propias reglas; nosotros solo recibimos la confirmación de que pagaste.',
       ]},
-      { h: '5. Seguridad', p: [
-        'Contraseñas cifradas con bcrypt, acceso autenticado mediante token y comunicación restringida a tu propia cuenta.',
+      { h: '5. Cómo los protegemos', p: [
+        'Tu contraseña se guarda cifrada y cada persona solo puede ver su propia cuenta. Para entrar a tus datos siempre hace falta haber iniciado sesión.',
       ]},
       { h: '6. Tus derechos (Ley N° 29733)', p: [
-        'Conforme a la Ley de Protección de Datos Personales del Perú, puedes ejercer tus derechos de acceso, rectificación, cancelación y oposición escribiendo a soporte@fintu.pe.',
+        'Puedes pedirnos ver tus datos, corregirlos, borrarlos u oponerte a que los usemos. Escríbenos a soporte@fintu.pe y lo resolvemos.',
       ]},
-      { h: '7. Almacenamiento local', p: [
-        'La app guarda tu sesión (token) en el almacenamiento local de tu navegador para mantenerte conectado. Se elimina al cerrar sesión.',
+      { h: '7. Lo que se guarda en tu navegador', p: [
+        'Guardamos tu sesión en tu navegador para que no tengas que entrar cada vez. Se borra cuando cierras sesión.',
       ]},
     ],
   },
@@ -86,7 +89,7 @@ function LegalModal({ doc, onClose }) {
         <div className="lp-legal-head">
           <div>
             <h3>{data.title}</h3>
-            <span>Última actualización: {data.updated}</span>
+            <span>{data.intro} Actualizado: {data.updated}.</span>
           </div>
           <button className="lp-legal-x" onClick={onClose} aria-label="Cerrar">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" width="14" height="14">
@@ -134,6 +137,11 @@ const IcCards = () => (
     <rect x="2" y="7" width="17" height="12" rx="2" /><path d="M6 4h14a2 2 0 0 1 2 2v9" /><line x1="2" y1="11" x2="19" y2="11" />
   </svg>
 );
+const IcSpark = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.5 2.5M15.2 15.2l2.5 2.5M6.3 17.7l2.5-2.5M15.2 8.8l2.5-2.5" />
+  </svg>
+);
 const IcShield = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" aria-hidden="true">
     <path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z" />
@@ -149,9 +157,9 @@ const IcChevron = () => (
    CONTENIDO
 ════════════════════════════════════════════════════════════ */
 const STEPS = [
-  { n: '01', t: 'Crea tu cuenta',      d: 'Un pago único de $4 con PayPal.' },
-  { n: '02', t: 'Agrega tus tarjetas', d: 'Banco, línea y fechas. Nada más.' },
-  { n: '03', t: 'Paga a tiempo',       d: 'Fintú te dice cuánto y cuándo.' },
+  { n: '01', t: 'Crea tu cuenta',      d: 'Te registras y pagas $4 una sola vez.' },
+  { n: '02', t: 'Agrega tus tarjetas', d: 'Solo el banco, tu línea y tus fechas.' },
+  { n: '03', t: 'Paga a tiempo',       d: 'Nosotros te decimos cuánto y cuándo.' },
 ];
 
 const PRICE_INCLUDES = [
@@ -163,15 +171,17 @@ const PRICE_INCLUDES = [
 
 const FAQS = [
   { q: '¿Es seguro?',
-    a: 'No pedimos claves, números de tarjeta ni acceso a tu banco. Solo los montos y fechas que tú ingresas.' },
-  { q: '¿Los $4 son mensuales?',
-    a: 'No. Pagas una vez y la app es tuya para siempre.' },
+    a: 'Sí. Nunca te pedimos claves, números de tarjeta ni acceso a tu banco. Solo anotas montos y fechas, y esa información es solo tuya.' },
+  { q: '¿Los $4 son cada mes?',
+    a: 'No, es un solo pago. Pagas una vez y la app es tuya para siempre, con las mejoras que vayan llegando.' },
   { q: '¿Funciona con mi banco?',
-    a: 'Sí, con cualquier tarjeta de crédito de cualquier banco.' },
+    a: 'Sí, con cualquier tarjeta de crédito, sea del banco que sea.' },
+  { q: '¿Es una app o una página web?',
+    a: 'Por ahora la usas desde el navegador de tu celular o tu computadora, sin instalar nada. Entras con tu correo y tienes todo a la mano.' },
   { q: 'Aún no tengo tarjeta, ¿me sirve?',
-    a: 'Sí. Si recién empiezas, una tarjeta con garantía (dejas un depósito como respaldo) es la forma más fácil de construir historial, y Fintú te ayuda a cuidarlo desde el primer día.' },
+    a: 'Sí. Si recién empiezas, una tarjeta con garantía (dejas un depósito como respaldo) es la forma más fácil de armar tu historial, y Fintú te acompaña a cuidarlo desde el primer día.' },
   { q: '¿Y si olvido mi contraseña?',
-    a: 'La recuperas con tu email desde la pantalla de inicio de sesión.' },
+    a: 'No pasa nada: la recuperas con tu correo desde la pantalla de inicio de sesión, en un minuto.' },
 ];
 
 const NAV = [
@@ -291,7 +301,7 @@ function Showcase() {
    LANDING
 ════════════════════════════════════════════════════════════ */
 export default function Landing() {
-  const [openFaq, setOpenFaq] = useState(0);
+  const [openFaq, setOpenFaq] = useState(null);   // todas cerradas: cada quien abre la que le interesa
   const [navScrolled, setNavScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [legalOpen, setLegalOpen] = useState(null); // null | 'terminos' | 'privacidad'
@@ -368,8 +378,8 @@ export default function Landing() {
             <h1 className="lp-h1">No pagues<br />intereses de más.</h1>
             <div className="lp-hero-side">
               <p>
-                Fintú calcula el ciclo de cada tarjeta y te dice cuánto y cuándo
-                pagar. Sin conectar tu banco.
+                Te decimos cuánto pagar y cuándo, tarjeta por tarjeta, para que
+                no se te pase ninguna fecha. Y sin pedirte las claves de tu banco.
               </p>
               <div className="lp-btn-row">
                 <button className="lp-btn lp-btn--green lp-btn--lg" onClick={() => goApp('/registro')}>
@@ -401,29 +411,46 @@ export default function Landing() {
                 <div className="lp-ring-txt"><strong>7</strong><span>días para pagar</span></div>
               </div>
               <h3>Sabes cuándo pagar</h3>
-              <p>Fintú calcula el corte y el pago de cada tarjeta. Se acabaron las moras por olvido.</p>
+              <p>Calculamos por ti el corte y el pago de cada tarjeta. Olvídate de las moras por un descuido.</p>
             </article>
 
             <article className="lp-b reveal">
               <span className="lp-b-ico"><IcPercent /></span>
               <h3>Ves el interés antes de que llegue</h3>
-              <p>Te muestra cuánto pagarías si no cancelas el total.</p>
+              <p>Te mostramos cuánto pagarías si no cancelas el total, antes de que pase.</p>
             </article>
 
             <article className="lp-b reveal">
               <span className="lp-b-ico"><IcCards /></span>
               <h3>Todo en un solo lugar</h3>
-              <p>Hasta 4 tarjetas de cualquier banco, en un tablero.</p>
+              <p>Hasta 4 tarjetas, del banco que sea, juntas en un mismo lugar.</p>
             </article>
 
             <article className="lp-b lp-b--peach lp-b--wide reveal">
               <div>
-                <h3>Tu historial mejora solo</h3>
-                <p>Pagar a tiempo construye tu perfil: mejores tasas, más línea y créditos más grandes después.</p>
+                <h3>Tu historial mejora contigo</h3>
+                <p>Cada pago a tiempo suma. Con el tiempo, eso se traduce en mejores tasas, más línea y créditos más grandes.</p>
               </div>
               <svg className="lp-b-trend" viewBox="0 0 160 70" aria-hidden="true">
                 <polyline points="4,62 36,50 64,54 96,30 124,24 156,6" />
               </svg>
+            </article>
+
+            {/* Personalización: la app decide con TUS datos (sin prometer IA) */}
+            <article className="lp-b lp-b--full reveal">
+              <div className="lp-b-full-copy">
+                <span className="lp-b-ico"><IcSpark /></span>
+                <h3>Hecho a tu medida</h3>
+                <p>
+                  Fintú se adapta a tus tarjetas y a tu forma de pagar. Así, en vez de
+                  consejos genéricos, te dice qué te conviene a ti.
+                </p>
+              </div>
+              <ul className="lp-b-examples">
+                <li><b>Qué tarjeta bajar primero</b><span>La que más te cuesta en intereses.</span></li>
+                <li><b>Cuánto pagar este mes</b><span>Tres opciones con tus montos reales.</span></li>
+                <li><b>Metas a tu ritmo</b><span>Según tu deuda y tu uso de línea.</span></li>
+              </ul>
             </article>
           </div>
 
@@ -438,7 +465,7 @@ export default function Landing() {
         <section id="pasos" className="lp-sec lp-sec--tight">
           <div className="lp-steps-head reveal">
             <span className="lp-eyebrow">Cómo funciona</span>
-            <h2 className="lp-h2">Listo en tres pasos.</h2>
+            <h2 className="lp-h2">Empiezas en tres pasos.</h2>
           </div>
           <ol className="lp-steps">
             {STEPS.map((s, i) => (
@@ -480,8 +507,8 @@ export default function Landing() {
         <section id="preguntas" className="lp-sec lp-faq">
           <div className="lp-faq-l reveal">
             <span className="lp-eyebrow">Preguntas</span>
-            <h2 className="lp-h2">Lo que todos preguntan.</h2>
-            <p>¿Otra duda? <a href="mailto:soporte@fintu.pe">soporte@fintu.pe</a></p>
+            <h2 className="lp-h2">¿Tienes dudas? Te las resolvemos.</h2>
+            <p>¿No encuentras la tuya? Escríbenos a <a href="mailto:soporte@fintu.pe">soporte@fintu.pe</a> y te respondemos.</p>
           </div>
           <div className="lp-faq-list reveal">
             {FAQS.map((f, i) => {
