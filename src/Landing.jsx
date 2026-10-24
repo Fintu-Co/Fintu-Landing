@@ -177,7 +177,7 @@ const FAQS = [
   { q: '¿Funciona con mi banco?',
     a: 'Sí, con cualquier tarjeta de crédito, sea del banco que sea.' },
   { q: '¿Es una app o una página web?',
-    a: 'Por ahora la usas desde el navegador de tu celular o tu computadora, sin instalar nada. Entras con tu correo y tienes todo a la mano.' },
+    a: 'Las dos cosas. Funciona desde el navegador de tu celular o tu computadora, y en el celular puedes instalarla como app: queda en tu pantalla de inicio, con su ícono, sin pasar por ninguna tienda de apps.' },
   { q: 'Aún no tengo tarjeta, ¿me sirve?',
     a: 'Sí. Si recién empiezas, una tarjeta con garantía (dejas un depósito como respaldo) es la forma más fácil de armar tu historial, y Fintú te acompaña a cuidarlo desde el primer día.' },
   { q: '¿Y si olvido mi contraseña?',
