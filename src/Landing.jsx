@@ -8,6 +8,25 @@ import imgCardsFan from './assets/images/cards-fan.jpg';
 const APP_URL = (import.meta.env.VITE_APP_URL || 'http://localhost:5173').replace(/\/$/, '');
 const goApp = (path) => { window.location.href = `${APP_URL}${path}`; };
 
+/*
+  Oferta vigente (la decide el backend): cupos de fundador que quedan, o plan anual.
+  Si el backend no responde, el landing muestra el texto fijo, sin número.
+*/
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+function useOferta() {
+  const [oferta, setOferta] = useState(null);
+  useEffect(() => {
+    if (!API_URL) return;
+    let activo = true;
+    fetch(`${API_URL}/api/auth/oferta`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (activo && d?.success) setOferta(d.oferta); })
+      .catch(() => {});
+    return () => { activo = false; };
+  }, []);
+  return oferta;
+}
+
 /* ════════════════════════════════════════════════════════════
    LEGAL — Términos y Privacidad
    Plantilla de referencia; revisar con un abogado antes de operar.
@@ -23,7 +42,7 @@ const LEGAL = {
       ]},
       { h: '2. Cuánto pagas y qué obtienes', p: [
         'Precio de fundador: los primeros 100 usuarios pagan $5 USD una sola vez, por PayPal, y tienen acceso a todo mientras el servicio exista. No hay mensualidades ni cobros automáticos.',
-        'Quienes se registren después de los primeros 100 pagarán una suscripción anual. Su precio lo anunciaremos antes en esta página.',
+        'Quienes se registren después de los primeros 100 pagan $10 USD por un año de acceso. No hay renovación automática: te avisamos por correo antes de que venza y renuevas solo si quieres. Si no renuevas, tus datos se guardan y vuelves a entrar cuando pagues.',
         'Tu acceso es personal: no se puede vender ni pasar a otra persona.',
       ]},
       { h: '3. Tu cuenta', p: [
@@ -174,7 +193,7 @@ const FAQS = [
   { q: '¿Es seguro?',
     a: 'Sí. Nunca te pedimos claves, números de tarjeta ni acceso a tu banco. Solo anotas montos y fechas, y esa información es solo tuya.' },
   { q: '¿Los $5 son cada mes?',
-    a: 'No. Para los primeros 100 usuarios es un solo pago: la app es tuya de por vida, con las mejoras que vayan llegando. Después de los 100, pasará a un pago anual.' },
+    a: 'No. Para los primeros 100 usuarios es un solo pago: la app es tuya de por vida, con las mejoras que vayan llegando. Después de los 100, el acceso cuesta $10 al año, sin cobros automáticos.' },
   { q: '¿Funciona con mi banco?',
     a: 'Sí, con cualquier tarjeta de crédito, sea del banco que sea.' },
   { q: '¿Es una app o una página web?',
@@ -303,6 +322,9 @@ function Showcase() {
 ════════════════════════════════════════════════════════════ */
 export default function Landing() {
   const [openFaq, setOpenFaq] = useState(null);   // todas cerradas: cada quien abre la que le interesa
+  const oferta = useOferta();
+  const anual = oferta?.plan === 'anual';
+  const precio = oferta ? Number(oferta.precio) : 5;
   const [navScrolled, setNavScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [legalOpen, setLegalOpen] = useState(null); // null | 'terminos' | 'privacidad'
@@ -384,7 +406,7 @@ export default function Landing() {
               </p>
               <div className="lp-btn-row">
                 <button className="lp-btn lp-btn--green lp-btn--lg" onClick={() => goApp('/registro')}>
-                  Empezar por $5 <Arr />
+                  Empezar por ${precio} <Arr />
                 </button>
                 <button className="lp-btn lp-btn--outline lp-btn--lg" onClick={() => goApp('/demo')}>
                   Probar demo
@@ -482,10 +504,22 @@ export default function Landing() {
         {/* ─── PRECIO ─── */}
         <section id="precio" className="lp-frame lp-price reveal">
           <div className="lp-price-l">
-            <span className="lp-eyebrow lp-eyebrow--light">Precio de fundador</span>
-            <div className="lp-price-num"><span>$</span>5</div>
-            <h2 className="lp-h2 lp-h2--light">Una vez. De por vida.</h2>
-            <p>Solo para los primeros 100 usuarios. Después, Fintú pasará a un pago anual.</p>
+            <span className="lp-eyebrow lp-eyebrow--light">{anual ? 'Plan anual' : 'Precio de fundador'}</span>
+            <div className="lp-price-num"><span>$</span>{precio}</div>
+            {anual ? (
+              <>
+                <h2 className="lp-h2 lp-h2--light">Un año completo.</h2>
+                <p>Sin cobros automáticos: renuevas solo si quieres. Te avisamos antes de que venza.</p>
+              </>
+            ) : (
+              <>
+                <h2 className="lp-h2 lp-h2--light">Una vez. De por vida.</h2>
+                <p>Solo para los primeros {oferta?.limite ?? 100} usuarios. Después, Fintú pasará a un pago anual.</p>
+                {oferta?.quedan != null && (
+                  <p className="lp-price-cupos"><strong>Quedan {oferta.quedan} de {oferta.limite}</strong> cupos de fundador.</p>
+                )}
+              </>
+            )}
           </div>
           <div className="lp-price-r">
             <ul>
@@ -544,7 +578,7 @@ export default function Landing() {
           <h2 className="lp-h2 lp-h2--light">Toma el control<br />de tus tarjetas.</h2>
           <div className="lp-btn-row">
             <button className="lp-btn lp-btn--peach lp-btn--lg" onClick={() => goApp('/registro')}>
-              Empezar por $5 <Arr />
+              Empezar por ${precio} <Arr />
             </button>
             <button className="lp-btn lp-btn--ink lp-btn--lg" onClick={() => goApp('/login')}>
               Iniciar sesión
@@ -579,7 +613,7 @@ export default function Landing() {
 
       {/* ─── CTA FIJO EN CELULAR ─── */}
       <div className="lp-sticky">
-        <span><strong>$5</strong> de por vida</span>
+        <span><strong>${precio}</strong> {anual ? 'al año' : 'de por vida'}</span>
         <button className="lp-btn lp-btn--green" onClick={() => goApp('/registro')}>Empezar <Arr /></button>
       </div>
     </div>

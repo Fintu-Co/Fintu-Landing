@@ -524,6 +524,7 @@ body { background: #E9E3DA; }
   text-decoration: underline; text-underline-offset: 3px;
 }
 .lp-price-demo:hover { color: #F7F3ED; }
+.lp-price-cupos {  display: inline-block; margin-top: 14px; padding: 8px 14px; border-radius: 999px;  background: rgba(241, 182, 140, 0.14); color: #F7F3ED; font-size: 14px;}.lp-price-cupos strong { color: #F1B68C; }
 .lp-price-fine { font-size: 12.5px; line-height: 1.6; color: rgba(247, 243, 237, 0.6); }
 .lp-price-fine button {
   background: none;
