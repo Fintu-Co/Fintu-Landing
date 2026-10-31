@@ -157,7 +157,8 @@ const LEGAL = {
         'Puedes pedirnos ver tus datos, corregirlos, borrarlos u oponerte a que los usemos. Escríbenos a soporte.fintu@gmail.com y lo resolvemos.',
       ]},
       { h: '7. Lo que se guarda en tu navegador', p: [
-        'Guardamos tu sesión en tu navegador para que no tengas que entrar cada vez. Se borra cuando cierras sesión.',
+        'Guardamos tu sesión en tu navegador para que no tengas que entrar cada vez. Se borra cuando cierras sesión. También recordamos pequeñas preferencias, como si ya cerraste el aviso para instalar la app.',
+        'No usamos cookies de publicidad ni de análisis, ni rastreamos lo que haces fuera de Fintú. Por eso no te pedimos aceptar cookies. Al pagar, PayPal puede usar sus propias cookies para procesar el pago.',
       ]},
     ],
   },
