@@ -22,7 +22,8 @@ const LEGAL = {
         'Una herramienta para ordenar tus tarjetas de crédito. No somos un banco: no prestamos dinero ni nos conectamos a tu banco. Todo lo que ves en la app lo registras tú.',
       ]},
       { h: '2. Cuánto pagas y qué obtienes', p: [
-        'Pagas $4 USD una sola vez, por PayPal. Con eso tienes acceso a todo mientras el servicio exista. No hay mensualidades ni cobros automáticos.',
+        'Precio de fundador: los primeros 100 usuarios pagan $5 USD una sola vez, por PayPal, y tienen acceso a todo mientras el servicio exista. No hay mensualidades ni cobros automáticos.',
+        'Quienes se registren después de los primeros 100 pagarán una suscripción anual. Su precio lo anunciaremos antes en esta página.',
         'Tu acceso es personal: no se puede vender ni pasar a otra persona.',
       ]},
       { h: '3. Tu cuenta', p: [
@@ -71,7 +72,7 @@ const LEGAL = {
         'Tu contraseña se guarda cifrada y cada persona solo puede ver su propia cuenta. Para entrar a tus datos siempre hace falta haber iniciado sesión.',
       ]},
       { h: '6. Tus derechos (Ley N° 29733)', p: [
-        'Puedes pedirnos ver tus datos, corregirlos, borrarlos u oponerte a que los usemos. Escríbenos a soporte@fintu.pe y lo resolvemos.',
+        'Puedes pedirnos ver tus datos, corregirlos, borrarlos u oponerte a que los usemos. Escríbenos a soporte.fintu@gmail.com y lo resolvemos.',
       ]},
       { h: '7. Lo que se guarda en tu navegador', p: [
         'Guardamos tu sesión en tu navegador para que no tengas que entrar cada vez. Se borra cuando cierras sesión.',
@@ -104,7 +105,7 @@ function LegalModal({ doc, onClose }) {
               {s.p.map((t, i) => <p key={i}>{t}</p>)}
             </section>
           ))}
-          <p className="lp-legal-contact">¿Dudas? Escríbenos a soporte@fintu.pe</p>
+          <p className="lp-legal-contact">¿Dudas? Escríbenos a soporte.fintu@gmail.com</p>
         </div>
         <div className="lp-legal-foot">
           <button className="lp-btn lp-btn--green" onClick={onClose}>Entendido</button>
@@ -157,7 +158,7 @@ const IcChevron = () => (
    CONTENIDO
 ════════════════════════════════════════════════════════════ */
 const STEPS = [
-  { n: '01', t: 'Crea tu cuenta',      d: 'Te registras y pagas $4 una sola vez.' },
+  { n: '01', t: 'Crea tu cuenta',      d: 'Te registras y pagas $5 una sola vez.' },
   { n: '02', t: 'Agrega tus tarjetas', d: 'Solo el banco, tu línea y tus fechas.' },
   { n: '03', t: 'Paga a tiempo',       d: 'Nosotros te decimos cuánto y cuándo.' },
 ];
@@ -172,8 +173,8 @@ const PRICE_INCLUDES = [
 const FAQS = [
   { q: '¿Es seguro?',
     a: 'Sí. Nunca te pedimos claves, números de tarjeta ni acceso a tu banco. Solo anotas montos y fechas, y esa información es solo tuya.' },
-  { q: '¿Los $4 son cada mes?',
-    a: 'No, es un solo pago. Pagas una vez y la app es tuya para siempre, con las mejoras que vayan llegando.' },
+  { q: '¿Los $5 son cada mes?',
+    a: 'No. Para los primeros 100 usuarios es un solo pago: la app es tuya de por vida, con las mejoras que vayan llegando. Después de los 100, pasará a un pago anual.' },
   { q: '¿Funciona con mi banco?',
     a: 'Sí, con cualquier tarjeta de crédito, sea del banco que sea.' },
   { q: '¿Es una app o una página web?',
@@ -276,7 +277,7 @@ function Showcase() {
           <div><span>Deuda total</span><strong>S/ 3,480</strong></div>
           <div><span>Próximo corte</span><strong>25 nov</strong></div>
           <div><span>Tarjetas</span><strong>3</strong></div>
-          <div><span>Fintú Score</span><strong>82</strong></div>
+          <div><span>Uso de línea</span><strong>34%</strong></div>
         </div>
         <div className="lp-show-tiles">
           <div className="lp-tile">
@@ -383,10 +384,10 @@ export default function Landing() {
               </p>
               <div className="lp-btn-row">
                 <button className="lp-btn lp-btn--green lp-btn--lg" onClick={() => goApp('/registro')}>
-                  Empezar por $4 <Arr />
+                  Empezar por $5 <Arr />
                 </button>
-                <button className="lp-btn lp-btn--outline lp-btn--lg" onClick={go('pasos')}>
-                  Cómo funciona
+                <button className="lp-btn lp-btn--outline lp-btn--lg" onClick={() => goApp('/demo')}>
+                  Probar demo
                 </button>
               </div>
             </div>
@@ -449,7 +450,7 @@ export default function Landing() {
               <ul className="lp-b-examples">
                 <li><b>Qué tarjeta bajar primero</b><span>La que más te cuesta en intereses.</span></li>
                 <li><b>Cuánto pagar este mes</b><span>Tres opciones con tus montos reales.</span></li>
-                <li><b>Metas a tu ritmo</b><span>Según tu deuda y tu uso de línea.</span></li>
+                <li><b>Cuándo sales de deudas</b><span>Con lo que puedes pagar al mes.</span></li>
               </ul>
             </article>
           </div>
@@ -481,10 +482,10 @@ export default function Landing() {
         {/* ─── PRECIO ─── */}
         <section id="precio" className="lp-frame lp-price reveal">
           <div className="lp-price-l">
-            <span className="lp-eyebrow lp-eyebrow--light">Precio</span>
-            <div className="lp-price-num"><span>$</span>4</div>
-            <h2 className="lp-h2 lp-h2--light">Una vez. Para siempre.</h2>
-            <p>Menos de lo que cuesta un solo descuido con tu tarjeta.</p>
+            <span className="lp-eyebrow lp-eyebrow--light">Precio de fundador</span>
+            <div className="lp-price-num"><span>$</span>5</div>
+            <h2 className="lp-h2 lp-h2--light">Una vez. De por vida.</h2>
+            <p>Solo para los primeros 100 usuarios. Después, Fintú pasará a un pago anual.</p>
           </div>
           <div className="lp-price-r">
             <ul>
@@ -494,6 +495,9 @@ export default function Landing() {
             </ul>
             <button className="lp-btn lp-btn--peach lp-btn--lg lp-btn--block" onClick={() => goApp('/registro')}>
               Crear mi cuenta <Arr />
+            </button>
+            <button type="button" className="lp-price-demo" onClick={() => goApp('/demo')}>
+              ¿Prefieres verla primero? Prueba la demo
             </button>
             <p className="lp-price-fine">
               Pago seguro con PayPal. Al crear tu cuenta aceptas los{' '}
@@ -508,7 +512,7 @@ export default function Landing() {
           <div className="lp-faq-l reveal">
             <span className="lp-eyebrow">Preguntas</span>
             <h2 className="lp-h2">¿Tienes dudas? Te las resolvemos.</h2>
-            <p>¿No encuentras la tuya? Escríbenos a <a href="mailto:soporte@fintu.pe">soporte@fintu.pe</a> y te respondemos.</p>
+            <p>¿No encuentras la tuya? Escríbenos a <a href="mailto:soporte.fintu@gmail.com">soporte.fintu@gmail.com</a> y te respondemos.</p>
           </div>
           <div className="lp-faq-list reveal">
             {FAQS.map((f, i) => {
@@ -540,7 +544,7 @@ export default function Landing() {
           <h2 className="lp-h2 lp-h2--light">Toma el control<br />de tus tarjetas.</h2>
           <div className="lp-btn-row">
             <button className="lp-btn lp-btn--peach lp-btn--lg" onClick={() => goApp('/registro')}>
-              Empezar por $4 <Arr />
+              Empezar por $5 <Arr />
             </button>
             <button className="lp-btn lp-btn--ink lp-btn--lg" onClick={() => goApp('/login')}>
               Iniciar sesión
@@ -566,7 +570,7 @@ export default function Landing() {
           </div>
           <div className="lp-foot-col">
             <h4>Contacto</h4>
-            <a href="mailto:soporte@fintu.pe">soporte@fintu.pe</a>
+            <a href="mailto:soporte.fintu@gmail.com">soporte.fintu@gmail.com</a>
           </div>
         </div>
 
@@ -575,7 +579,7 @@ export default function Landing() {
 
       {/* ─── CTA FIJO EN CELULAR ─── */}
       <div className="lp-sticky">
-        <span><strong>$4</strong> pago único</span>
+        <span><strong>$5</strong> de por vida</span>
         <button className="lp-btn lp-btn--green" onClick={() => goApp('/registro')}>Empezar <Arr /></button>
       </div>
     </div>

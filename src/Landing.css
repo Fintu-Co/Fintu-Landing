@@ -518,6 +518,12 @@ body { background: #E9E3DA; }
   place-items: center;
   flex-shrink: 0;
 }
+.lp-price-demo {
+  align-self: center; padding: 4px 0; border: 0; background: none; cursor: pointer;
+  font: inherit; font-size: 14px; font-weight: 600; color: #F1B68C;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.lp-price-demo:hover { color: #F7F3ED; }
 .lp-price-fine { font-size: 12.5px; line-height: 1.6; color: rgba(247, 243, 237, 0.6); }
 .lp-price-fine button {
   background: none;
