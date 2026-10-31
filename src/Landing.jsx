@@ -27,6 +27,68 @@ function useOferta() {
   return oferta;
 }
 
+/*
+  "Avísame cuando salga": guarda el correo en el backend (/api/lista/unirse).
+  Solo se muestra si el backend respondió (hay oferta): sin backend, no hay
+  dónde guardar el correo y el envío fallaría.
+*/
+function Avisame() {
+  const [email, setEmail] = useState('');
+  const [estado, setEstado] = useState({ tipo: 'idle', texto: '' });
+
+  const enviar = async (e) => {
+    e.preventDefault();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setEstado({ tipo: 'error', texto: 'Revisa tu correo: parece que no es válido.' });
+      return;
+    }
+    setEstado({ tipo: 'enviando', texto: '' });
+    try {
+      const res = await fetch(`${API_URL}/api/lista/unirse`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        setEstado({ tipo: 'ok', texto: 'Listo. Te avisaremos cuando abramos. Revisa tu correo.' });
+        setEmail('');
+      } else {
+        setEstado({ tipo: 'error', texto: data.message || 'No pudimos guardar tu correo. Intenta de nuevo.' });
+      }
+    } catch {
+      setEstado({ tipo: 'error', texto: 'No pudimos guardar tu correo. Intenta de nuevo.' });
+    }
+  };
+
+  if (estado.tipo === 'ok') {
+    return <p className="lp-avisame-ok" role="status">{estado.texto}</p>;
+  }
+
+  return (
+    <form className="lp-avisame" onSubmit={enviar} noValidate>
+      <label htmlFor="lp-avisame-email">¿Aún no te decides? Te avisamos cuando abramos.</label>
+      <div className="lp-avisame-row">
+        <input
+          id="lp-avisame-email"
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          placeholder="tu@correo.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          aria-invalid={estado.tipo === 'error'}
+        />
+        <button type="submit" className="lp-btn lp-btn--peach" disabled={estado.tipo === 'enviando'}>
+          {estado.tipo === 'enviando' ? 'Enviando…' : 'Avísame'}
+        </button>
+      </div>
+      {estado.tipo === 'error' && <p className="lp-avisame-err" role="alert">{estado.texto}</p>}
+      <small>Solo para avisarte del lanzamiento. Puedes pedir que te borremos cuando quieras.</small>
+    </form>
+  );
+}
+
 /* ════════════════════════════════════════════════════════════
    LEGAL — Términos y Privacidad
    Plantilla de referencia; revisar con un abogado antes de operar.
@@ -77,6 +139,7 @@ const LEGAL = {
       { h: '1. Lo que te pedimos', p: [
         'Para crear tu cuenta: nombre, apellido, correo y una contraseña. La contraseña se guarda cifrada: ni nosotros podemos verla. Cuando pagas, guardamos el código de la transacción que nos envía PayPal.',
         'Nunca te pedimos números de tarjeta, CVV, claves del banco ni acceso a tu banca por internet.',
+        'Si dejas tu correo en "Avísame", lo guardamos solo para avisarte del lanzamiento. Cada correo trae un enlace para darte de baja, y al usarlo lo borramos.',
       ]},
       { h: '2. Lo que tú anotas', p: [
         'Los montos, fechas y movimientos de tus tarjetas los escribes tú. Solo los usamos para mostrarte tu información y hacer tus cálculos.',
@@ -584,6 +647,7 @@ export default function Landing() {
               Iniciar sesión
             </button>
           </div>
+          {oferta && <Avisame />}
         </div>
 
         <div className="lp-foot">
