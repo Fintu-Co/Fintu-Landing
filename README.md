@@ -1,3 +1,5 @@
+<div align="center">
+
 # FINTÚ & CO.
 
 <img src="https://github.com/Fintu-Co/Fintu/blob/master/.github/workflows/docs/landing.png">
